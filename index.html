@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Financial Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .pulse-animation { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-2xl">🤖</span>
+                    </div>
+                    <h1 class="text-2xl font-bold">AI Financial Assistant</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm opacity-90">Balance: $12,450.32</span>
+                    <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                        <span class="text-sm">👤</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Monthly Spending</p>
+                        <p class="text-2xl font-bold text-gray-900">$3,247</p>
+                        <p class="text-xs text-red-500">↑ 12% vs last month</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                        <span class="text-2xl">💳</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Budget Remaining</p>
+                        <p class="text-2xl font-bold text-gray-900">$1,753</p>
+                        <p class="text-xs text-green-500">35% left this month</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <span class="text-2xl">🎯</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Savings Goal</p>
+                        <p class="text-2xl font-bold text-gray-900">68%</p>
+                        <p class="text-xs text-blue-500">$6,800 of $10,000</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span class="text-2xl">💰</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">AI Confidence</p>
+                        <p class="text-2xl font-bold text-gray-900">94%</p>
+                        <p class="text-xs text-purple-500">Prediction accuracy</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <span class="text-2xl">🧠</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Spending Prediction Chart -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900">Predictive Spending Analysis</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg">7D</button>
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg">30D</button>
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg">90D</button>
+                        </div>
+                    </div>
+                    <canvas id="spendingChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Recent Transactions with AI Categorization -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900">Recent Transactions</h2>
+                        <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</button>
+                    </div>
+                    <div id="transactionsList" class="space-y-4">
+                        <!-- Transactions will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-8">
+                <!-- Budget Alerts -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Smart Alerts</h2>
+                    <div id="alertsList" class="space-y-3">
+                        <!-- Alerts will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Goal Tracking -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Financial Goals</h2>
+                    <div id="goalsList" class="space-y-4">
+                        <!-- Goals will be populated by JavaScript -->
+                    </div>
+                    <button onclick="addNewGoal()" class="w-full mt-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors">
+                        + Add New Goal
+                    </button>
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Spending by Category</h2>
+                    <canvas id="categoryChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Transaction Modal -->
+        <div id="transactionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+                <h3 class="text-lg font-semibold mb-4">Add Transaction</h3>
+                <form id="transactionForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <input type="text" id="transactionDesc" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Coffee at Starbucks">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                        <input type="number" id="transactionAmount" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="4.50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">AI Suggested Category</label>
+                        <select id="transactionCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="food">🍔 Food & Dining</option>
+                            <option value="transport">🚗 Transportation</option>
+                            <option value="shopping">🛍️ Shopping</option>
+                            <option value="entertainment">🎬 Entertainment</option>
+                            <option value="bills">📄 Bills & Utilities</option>
+                            <option value="health">🏥 Healthcare</option>
+                        </select>
+                    </div>
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" onclick="closeTransactionModal()" class="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="submit" class="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Transaction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Goal Modal -->
+        <div id="goalModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+                <h3 class="text-lg font-semibold mb-4">Create Financial Goal</h3>
+                <form id="goalForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Goal Name</label>
+                        <input type="text" id="goalName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Emergency Fund">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Target Amount</label>
+                        <input type="number" id="goalTarget" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="5000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Current Amount</label>
+                        <input type="number" id="goalCurrent" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="1200">
+                    </div>
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" onclick="closeGoalModal()" class="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="submit" class="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create Goal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Add Button -->
+    <button onclick="openTransactionModal()" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 flex items-center justify-center text-2xl">
+        +
+    </button>
+
+    <script>
+        // Sample data
+        let transactions = [
+            { id: 1, desc: "Starbucks Coffee", amount: -4.50, category: "food", date: "2024-01-15", confidence: 95 },
+            { id: 2, desc: "Uber Ride", amount: -12.30, category: "transport", date: "2024-01-15", confidence: 98 },
+            { id: 3, desc: "Salary Deposit", amount: 3200.00, category: "income", date: "2024-01-14", confidence: 100 },
+            { id: 4, desc: "Amazon Purchase", amount: -67.89, category: "shopping", date: "2024-01-14", confidence: 92 },
+            { id: 5, desc: "Netflix Subscription", amount: -15.99, category: "entertainment", date: "2024-01-13", confidence: 100 }
+        ];
+
+        let goals = [
+            { id: 1, name: "Emergency Fund", target: 10000, current: 6800, emoji: "🚨" },
+            { id: 2, name: "Vacation Fund", target: 3000, current: 1200, emoji: "✈️" },
+            { id: 3, name: "New Car", target: 25000, current: 8500, emoji: "🚗" }
+        ];
+
+        let alerts = [
+            { type: "warning", message: "You're 15% over your dining budget this month", action: "View Details" },
+            { type: "success", message: "Great job! You're on track with your savings goal", action: "Keep Going" },
+            { type: "info", message: "AI detected unusual spending pattern in shopping", action: "Review" }
+        ];
+
+        // Category mapping
+        const categoryEmojis = {
+            food: "🍔",
+            transport: "🚗",
+            shopping: "🛍️",
+            entertainment: "🎬",
+            bills: "📄",
+            health: "🏥",
+            income: "💰"
+        };
+
+        // AI categorization function
+        function categorizeTransaction(description) {
+            const desc = description.toLowerCase();
+            if (desc.includes('coffee') || desc.includes('restaurant') || desc.includes('food')) return 'food';
+            if (desc.includes('uber') || desc.includes('gas') || desc.includes('parking')) return 'transport';
+            if (desc.includes('amazon') || desc.includes('store') || desc.includes('shop')) return 'shopping';
+            if (desc.includes('netflix') || desc.includes('movie') || desc.includes('game')) return 'entertainment';
+            if (desc.includes('electric') || desc.includes('water') || desc.includes('rent')) return 'bills';
+            if (desc.includes('doctor') || desc.includes('pharmacy') || desc.includes('hospital')) return 'health';
+            return 'shopping'; // default
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Spending prediction chart
+            const ctx1 = document.getElementById('spendingChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Jan 1', 'Jan 5', 'Jan 10', 'Jan 15', 'Jan 20', 'Jan 25', 'Jan 30'],
+                    datasets: [{
+                        label: 'Actual Spending',
+                        data: [120, 190, 300, 500, 650, 800, 950],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'AI Prediction',
+                        data: [null, null, null, null, null, 820, 1100],
+                        borderColor: '#EF4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Category breakdown chart
+            const ctx2 = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Food & Dining', 'Transportation', 'Shopping', 'Entertainment', 'Bills'],
+                    datasets: [{
+                        data: [450, 230, 180, 120, 300],
+                        backgroundColor: [
+                            '#EF4444',
+                            '#F59E0B',
+                            '#10B981',
+                            '#3B82F6',
+                            '#8B5CF6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render functions
+        function renderTransactions() {
+            const container = document.getElementById('transactionsList');
+            container.innerHTML = transactions.slice(0, 5).map(transaction => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                            ${categoryEmojis[transaction.category]}
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">${transaction.desc}</p>
+                            <p class="text-sm text-gray-500">AI: ${transaction.confidence}% confident</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-semibold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}">
+                            ${transaction.amount > 0 ? '+' : ''}$${Math.abs(transaction.amount).toFixed(2)}
+                        </p>
+                        <p class="text-sm text-gray-500">${transaction.date}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGoals() {
+            const container = document.getElementById('goalsList');
+            container.innerHTML = goals.map(goal => {
+                const progress = (goal.current / goal.target) * 100;
+                return `
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-lg">${goal.emoji}</span>
+                                <span class="font-medium text-gray-900">${goal.name}</span>
+                            </div>
+                            <span class="text-sm text-gray-600">${progress.toFixed(0)}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ${progress}%"></div>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>$${goal.current.toLocaleString()}</span>
+                            <span>$${goal.target.toLocaleString()}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderAlerts() {
+            const container = document.getElementById('alertsList');
+            const alertColors = {
+                warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
+                success: 'bg-green-50 border-green-200 text-green-800',
+                info: 'bg-blue-50 border-blue-200 text-blue-800'
+            };
+            
+            container.innerHTML = alerts.map(alert => `
+                <div class="p-3 rounded-lg border ${alertColors[alert.type]}">
+                    <p class="text-sm font-medium mb-1">${alert.message}</p>
+                    <button class="text-xs underline hover:no-underline">${alert.action}</button>
+                </div>
+            `).join('');
+        }
+
+        // Modal functions
+        function openTransactionModal() {
+            document.getElementById('transactionModal').classList.remove('hidden');
+            document.getElementById('transactionModal').classList.add('flex');
+        }
+
+        function closeTransactionModal() {
+            document.getElementById('transactionModal').classList.add('hidden');
+            document.getElementById('transactionModal').classList.remove('flex');
+        }
+
+        function addNewGoal() {
+            document.getElementById('goalModal').classList.remove('hidden');
+            document.getElementById('goalModal').classList.add('flex');
+        }
+
+        function closeGoalModal() {
+            document.getElementById('goalModal').classList.add('hidden');
+            document.getElementById('goalModal').classList.remove('flex');
+        }
+
+        // Form handlers
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const desc = document.getElementById('transactionDesc').value;
+            const amount = parseFloat(document.getElementById('transactionAmount').value);
+            const category = document.getElementById('transactionCategory').value;
+            
+            // AI categorization simulation
+            const suggestedCategory = categorizeTransaction(desc);
+            const confidence = Math.floor(Math.random() * 20) + 80; // 80-100% confidence
+            
+            const newTransaction = {
+                id: transactions.length + 1,
+                desc: desc,
+                amount: -amount,
+                category: category,
+                date: new Date().toISOString().split('T')[0],
+                confidence: confidence
+            };
+            
+            transactions.unshift(newTransaction);
+            renderTransactions();
+            closeTransactionModal();
+            
+            // Show AI feedback
+            setTimeout(() => {
+                alert(`AI Analysis: Transaction categorized as "${category}" with ${confidence}% confidence. ${suggestedCategory !== category ? `AI suggested "${suggestedCategory}" instead.` : 'Category matches AI suggestion!'}`);
+            }, 500);
+            
+            // Reset form
+            document.getElementById('transactionForm').reset();
+        });
+
+        document.getElementById('goalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('goalName').value;
+            const target = parseFloat(document.getElementById('goalTarget').value);
+            const current = parseFloat(document.getElementById('goalCurrent').value);
+            
+            const emojis = ['🎯', '💎', '🏆', '⭐', '🚀', '💫'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const newGoal = {
+                id: goals.length + 1,
+                name: name,
+                target: target,
+                current: current,
+                emoji: randomEmoji
+            };
+            
+            goals.push(newGoal);
+            renderGoals();
+            closeGoalModal();
+            
+            // Reset form
+            document.getElementById('goalForm').reset();
+        });
+
+        // Auto-categorization for transaction modal
+        document.getElementById('transactionDesc').addEventListener('input', function(e) {
+            const category = categorizeTransaction(e.target.value);
+            document.getElementById('transactionCategory').value = category;
+        });
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            renderTransactions();
+            renderGoals();
+            renderAlerts();
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                // Update AI confidence randomly
+                const confidenceElement = document.querySelector('.text-purple-500').previousElementSibling;
+                const newConfidence = Math.floor(Math.random() * 10) + 90;
+                confidenceElement.textContent = newConfidence + '%';
+            }, 5000);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e5a187673ea7e7',t:'MTc1Nzc0NTM5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
